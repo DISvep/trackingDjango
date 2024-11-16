@@ -5,12 +5,42 @@
 {% endblock title %}
 
 {% block content %}
+    <div class="col-xl-5 col-xxl-5 px-3 py-2">
+        <form method="GET" class="p-1 p-md-3 border rounded-3 bg-body-tetriary">
+            {{ filter_form.as_p }}
+            <button class="btn btn-primary" type="submit">пошук</button>
+        </form>
+    </div>
     <h1>Tasks</h1>
-    <ul>
-        {% for task in tasks %}
-            <p><a href = "{% url 'task-detail' task.pk %}">{{task.name}}</a></p>
-        {% endfor %}
-    </ul>
+    <hr class="border border-primary border-3 opacity-75">
+    <div class="container">
+        <div class="row row-cols-4">
+            {% for task in tasks %}
+                <div class="col">
+                    <a href="{% url 'task-detail' task.pk %}" style="text-decoration: none;">
+                        <div class="g-col-4 card" style="width: 18rem;">
+                            <div class="card-body">
+                                <div class="card-title fs-4 fw-bold">
+                                    {{task.name}}
+                                </div>
 
-    <a href = "/tasks/create/">Create New Task</a>
+                                <h5 class="card-subtitle mb-2 fw-light">
+                                    {{task.deadline}}<br><br>
+                                    status: {{task.get_status_display}}<br>
+                                    priority: {{task.get_priority_display}}
+                                </h5>
+
+                                <div class="card-text fs-5">
+                                    {{ task.description }}
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <hr class="border border-primary border-3 opacity-75">
+    <a class="btn btn-secondary" href="{% url 'task-create' %}">Create New Task</a>
 {% endblock content %}
