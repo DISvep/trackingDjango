@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 # Create your models here.
@@ -12,3 +13,12 @@ class Task(models.Model):
         ("_low", "Low"), ("_mid", "Middle"), ("_high", "High")
     ])
     deadline = models.DateTimeField()
+
+
+class Comment(models.Model):
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(User, related_name='post_likes')
+    dislikes = models.ManyToManyField(User, related_name='post_dislikes')

@@ -10,4 +10,77 @@
     <p>Status: {{task.status}}</p>
     <p>Priority: {{task.priority}}</p>
     <p>Deadline: {{task.deadline}}</p>
+    <p>
+        <a href="{% url 'task-update' task.pk %}">Update</a>
+        <a href="{% url 'task-delete' task.pk %}">Delete</a>
+    </p>
+    <h3>Comments:</h3>
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div class="card shadow-0 border" style="background-color: #f0f2f5;">
+          <div class="card-body p-4">
+            {% if user.is_authenticated %}
+                <form method="post">
+                    <div data-mdb-input-init class="form-outline mb-4 text-start">
+                        {% csrf_token %}
+                        {{ comment_form.as_p }}
+                        <button class="btn btn-secondary" type="submit">+ Add a note</button>
+                    </div>
+                </form>
+            {% endif %}
+
+            {% for comment in comments %}
+                <div class="card mb-4">
+                  <div class="card-body text-start">
+                    <p>{{ comment.content }}</p>
+
+                    <div class="d-flex justify-content-between">
+                      <div class="d-flex flex-row align-items-center">
+                        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="avatar" width="25"
+                          height="25">
+                        <p class="small mb-0 ms-2">{{ comment.author }}</p>
+                        <p class="small mb-0 ms-2 fw-lighter">{{ comment.created_at }}</p>
+                      </div>
+                      <div class="d-flex flex-row align-items-center">
+                        {% if comment.author == current_user %}
+                        <a href="{% url 'comment-delete' comment.pk %}"><i class="bi bi-trash3" style="color: #DC143C;"></i></a>
+                          &nbsp;&nbsp;
+                        <a href="{% url 'comment-update' comment.pk %}"><i class="bi bi-pencil" style="color: #00008B;"></i></a>
+                          &nbsp;&nbsp;
+                        {% endif %}
+                          <div style="display: flex; align-items: center; gap: 5px;">
+                            <form action="{% url 'like_comment' comment.pk %}" method="post" style="margin: 0;">
+                                {% csrf_token %}
+                                <button class="btn btn-link" type="submit" name="comment_id" value="{{comment.id}}">
+                                     {% if user in comment.likes.all %}
+                                        <i class="bi bi-hand-thumbs-up-fill" style="color: #228B22;"></i>
+                                    {% else %}
+                                        <i class="bi bi-hand-thumbs-up" style="color: #228B22;"></i>
+                                    {% endif %}
+                                </button>
+                            </form>
+                              <p class="small text-muted mb-0">{{ comment.likes.count }}</p>
+                          </div>
+                          <div style="display: flex; align-items: center; gap: 5px;">
+                            <form action="{% url 'dislike_comment' comment.pk %}" method="post" style="margin: 0;">
+                                {% csrf_token %}
+                                <button class="btn btn-link" type="submit" name="comment_id" value="{{comment.id}}">
+                                    {% if user in comment.dislikes.all %}
+                                        <i class="bi bi-hand-thumbs-down-fill" style="color: #8B0000;"></i>
+                                    {% else %}
+                                        <i class="bi bi-hand-thumbs-down" style="color: #8B0000;"></i>
+                                    {% endif %}
+                                </button>
+                            </form>
+                              <p class="small text-muted mb-0">{{ comment.dislikes.count }}</p>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
 {% endblock content %}
