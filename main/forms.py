@@ -20,8 +20,31 @@ class UserRegistrationForm(UserCreationForm):
 class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = ['name', 'description', 'status', 'priority', 'deadline']
-        widgets = {"deadline": forms.DateTimeInput(attrs={'type': 'datetime-local'})}
+        fields = ['name', 'description', 'image', 'media', 'status', 'priority', 'deadline']
+        widgets = {
+            "name": forms.TextInput(attrs={
+                'class': 'form-control'
+            }),
+            "description": forms.Textarea(attrs={
+                'class': 'form-control'
+            }),
+            "image": forms.FileInput(attrs={
+                'class': 'form-control'
+            }),
+            "media": forms.FileInput(attrs={
+                'class': 'form-control'
+            }),
+            "status": forms.Select(attrs={
+                'class': 'form-control'
+            }),
+            "priority": forms.Select(attrs={
+                'class': 'form-control'
+            }),
+            "deadline": forms.DateTimeInput(attrs={
+                'class': 'form-control',
+                'type': 'datetime-local'}
+            ),
+        }
 
 
 class TaskFilterForm(forms.Form):
@@ -55,13 +78,21 @@ class TaskFilterForm(forms.Form):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ['content']
-        labels = {'content': ''}
+        fields = ['content', "image", 'media']
+        labels = {'content': '', 'image': '', 'media': ''}
         widgets = {
             'content': forms.Textarea(attrs={
                 'class': 'form-control',
-                'rows': 2,
-                "cols": 50,
+                'rows': 1,
+                'cols': 50,
                 'placeholder': 'Type comment...'
+            }),
+            'image': forms.FileInput(attrs={
+                'class': 'form-control d-none',
+                'id': 'id_image_input'
+            }),
+            'media': forms.FileInput(attrs={
+                'class': 'form-control d-none',
+                'id': 'id_media_input'
             })
         }

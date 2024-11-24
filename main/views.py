@@ -47,7 +47,7 @@ class TaskDetail(DetailView):
         return context
 
     def post(self, request, *args, **kwargs):
-        form = CommentForm(request.POST)
+        form = CommentForm(request.POST, request.FILES)
 
         if form.is_valid():
             comment = form.save(commit=False)
@@ -65,6 +65,10 @@ class TaskCreate(CreateView):
     form_class = TaskForm
     success_url = '/'
     template_name = 'task_create.html'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
 class TaskDelete(LoginRequiredMixin, UserIsOwnerMixin, DeleteView):
