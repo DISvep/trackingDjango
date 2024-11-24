@@ -5,9 +5,13 @@
 {% endblock title %}
 
 {% block content %}
-    <form method="POST">
-        {% csrf_token %}
-        <button type="submit">Confirm</button>
-        <a href="/">Back</a>
-    </form>
+<div class="container min-vh-100 d-flex justify-content-center align-items-center">
+    <div class="card mb-3 d-flex justify-content-center align-items-center" style="width: 18rem; height: 18rem;">
+        <form method="POST">
+            {% csrf_token %}
+            <button class="btn btn-danger btn-lg" type="submit">Confirm</button>
+            <a class="btn btn-outline-primary btn-lg" href="/">Back</a>
+        </form>
+    </div>
+</div>
 {% endblock content %}
